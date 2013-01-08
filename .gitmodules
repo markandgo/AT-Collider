@@ -1,0 +1,3 @@
+[submodule "libs/ATL"]
+	path = libs/ATL
+	url = git://github.com/Kadoba/Advanced-Tiled-Loader.git
