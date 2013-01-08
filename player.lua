@@ -1,1 +1,0 @@
-return entity.new(32,32,31,31,atlMap,select(2,next(atlMap.layers)))

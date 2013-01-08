@@ -1,3 +1,13 @@
+--[[
+Advanced Tiled Collider Version 0.1
+Copyright (c) 2013 Minh Ngo
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+--]]
 local floor = math.floor
 local ceil  = math.ceil
 local max   = math.max
@@ -158,36 +168,36 @@ end
 -- apply continuous collision detection as well
 function e:move(dx,dy)
 	if not self.isActive then self.x,self.y = self.x+dx,self.y+dy return end
+	local mw,mh         = self.map.tileWidth,self.map.tileHeight
 	-----------------------------------------------------------
 	-- x direction collision detection
 	local gx,gy,gx2,gy2 = self:getRange()
-	local x,x2,oldx     = self.x,self.x+dx,self.x
-	local mw,mh         = self.map.tileWidth,self.map.tileHeight
+	local x,oldx        = self.x,self.x
 	
 	local dxRatio,xDelta,gd,least,sideResolve
 	if dx >= 0 then
 		least,sideResolve = min,'rightSideResolve'
 		gx,gx2  = gx2,ceil((x+self.w+dx)/mw)-1
-		dxRatio = dx == 0 and 1 or ((gx+1)*mw-(x+self.w))/dx
-		xDelta  = dx == 0 and math.huge or mw/dx
 		gd      = 1
 	elseif dx < 0 then
 		least,sideResolve = max,'leftSideResolve'
 		gx2     = floor((x+dx)/mw)
-		dxRatio = (gx*mw-x)/dx
-		xDelta  = -mw/dx
 		gd      = -1
 	end
 	if dx == 0 then sideResolve = 'resolveX' end
 		
-	-- continuous collision detection	
+	-- continuous collision detection by moving cell by cell
 	for tx = gx,gx2,gd do
-		local minDX = least(dx,dxRatio*dx)
-		self.x = oldx+minDX
-		x      = oldx+minDX
+		-- take shortest path from dx or snapping to grid
+		if dx >= 0 then 
+			self.x = least((tx+1)*mw-self.w,oldx+dx) 
+		else 
+			self.x = least(tx*mw,oldx+dx) 
+		end
+		local newx  = self.x
 		self[sideResolve](self,tx,gy,0,gy2-gy)
 		-- if there was a collision, quit movement
-		if self.x ~= x then break end
+		if self.x ~= newx then break end
 		local oldy = self.y
 		-- height correction so we can continue moving horizontally
 		self:resolveY()
@@ -195,41 +205,38 @@ function e:move(dx,dy)
 		if self.y ~= oldy then 
 			_,gy,_,gy2 = self:getRange()
 		end
-		dxRatio = dxRatio + xDelta
 	end	
 	-----------------------------------------------------------
 	-- y direction collision detection
 	local gx,gy,gx2,gy2 = self:getRange()
-	local y,y2,oldy     = self.y,self.y+dy,self.y
+	local y,oldy        = self.y,self.y
 	
 	local dyRatio,yDelta,gd,least,sideResolve
 	if dy >= 0 then
 		least,sideResolve = min,'bottomSideResolve'
 		gy,gy2  = gy2,ceil((y+self.h+dy)/mh)-1
-		dyRatio = dy == 0 and 1 or ((gy+1)*mh-(y+self.h))/dy
-		yDelta  = dy == 0 and math.huge or mh/dy
 		gd      = 1
 	elseif dy < 0 then
 		least,sideResolve = max,'topSideResolve'
 		gy2     = floor((y+dy)/mh)
-		dyRatio = (gy*mh-y)/dy
-		yDelta  = -mh/dy
 		gd      = -1
 	end
 	if dy == 0 then sideResolve = 'resolveY' end
 		
 	for ty = gy,gy2,gd do
-		local minDY = least(dy,dyRatio*dy)
-		self.y = oldy+minDY
-		y      = oldy+minDY
+		if dy >= 0 then 
+			self.y = least((ty+1)*mh-self.h,oldy+dy) 
+		else 
+			self.y = least(ty*mh,oldy+dy) 
+		end
+		local newy  = self.y
 		self[sideResolve](self,gx,ty,gx2-gx,0)
-		if self.y ~= y then break end
+		if self.y ~= newy then break end
 		local oldx = self.x
 		self:resolveX()
-		if self.x ~= oldx then 
+		if self.x ~= oldx then
 			gx,_,gx2,_ = self:getRange()
 		end
-		dyRatio = dyRatio + yDelta
 	end	
 end
 -----------------------------------------------------------
