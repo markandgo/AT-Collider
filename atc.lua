@@ -1,5 +1,5 @@
 --[[
-Advanced Tiled Collider Version 0.1
+Advanced Tiled Collider Version 0.11
 Copyright (c) 2013 Minh Ngo
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -176,11 +176,11 @@ function e:move(dx,dy)
 	
 	local dxRatio,xDelta,gd,least,sideResolve
 	if dx >= 0 then
-		least,sideResolve = min,'rightSideResolve'
+		least   = min
 		gx,gx2  = gx2,ceil((x+self.w+dx)/mw)-1
 		gd      = 1
 	elseif dx < 0 then
-		least,sideResolve = max,'leftSideResolve'
+		least   = max
 		gx2     = floor((x+dx)/mw)
 		gd      = -1
 	end
@@ -195,7 +195,7 @@ function e:move(dx,dy)
 			self.x = least(tx*mw,oldx+dx) 
 		end
 		local newx  = self.x
-		self[sideResolve](self,tx,gy,0,gy2-gy)
+		self:resolveX()
 		-- if there was a collision, quit movement
 		if self.x ~= newx then break end
 		local oldy = self.y
@@ -213,11 +213,11 @@ function e:move(dx,dy)
 	
 	local dyRatio,yDelta,gd,least,sideResolve
 	if dy >= 0 then
-		least,sideResolve = min,'bottomSideResolve'
+		least   = min
 		gy,gy2  = gy2,ceil((y+self.h+dy)/mh)-1
 		gd      = 1
 	elseif dy < 0 then
-		least,sideResolve = max,'topSideResolve'
+		least   = max
 		gy2     = floor((y+dy)/mh)
 		gd      = -1
 	end
@@ -230,7 +230,7 @@ function e:move(dx,dy)
 			self.y = least(ty*mh,oldy+dy) 
 		end
 		local newy  = self.y
-		self[sideResolve](self,gx,ty,gx2-gx,0)
+		self:resolveY()
 		if self.y ~= newy then break end
 		local oldx = self.x
 		self:resolveX()

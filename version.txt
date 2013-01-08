@@ -1,5 +1,9 @@
 Advanced Tiled Collider
 
+[0.11] (2013/1/08)
+===================
+	Changed continuous collision detection to detect all sides when moving instead of the "front" sides
+
 [0.1] (2013/1/08)
 ===================
 	Initial release
