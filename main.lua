@@ -63,15 +63,17 @@ function love.draw()
 	love.graphics.setColor(255,255,255)
 	
 	love.graphics.print('Mouse wheel to change speed',32,0)
-	love.graphics.print('1 or 2 to toggle height maps',32,12)
+	love.graphics.print('1 or 2 to toggle height maps. 3 to toggle collision detection',32,12)
 	love.graphics.print('Horizontal height map enable: ' .. tostring(enableHorizontalHeightMap),32,24)
 	love.graphics.print('Vertical height map enable: ' .. tostring(enableVerticalHeightMap),32,36)
-	love.graphics.print('velocity: '.. velocity,32,48)
+	love.graphics.print('Is active?: ' .. tostring(player.isActive),32,48)
+	love.graphics.print('velocity: '.. velocity,32,60)
 end
 
 function love.keypressed(k)
 	if k == '1' then enableHorizontalHeightMap  = not enableHorizontalHeightMap end
 	if k == '2' then enableVerticalHeightMap    = not enableVerticalHeightMap   end
+	if k == '3' then player.isActive            = not player.isActive           end
 end
 
 function love.mousepressed(x,y,k)
