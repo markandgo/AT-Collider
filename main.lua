@@ -1,7 +1,7 @@
 function love.load()
 	atl     = require 'libs.ATL'
 	atlMap  = atl.Loader.load 'map/map.tmx'
-	entity  = require 'libs.atc'
+	entity  = require 'libs.atc.atc'
 	player  = entity.new(32,32,31,31,atlMap,select(2,next(atlMap.layers)))
 	
 	-- set up collision callbacks

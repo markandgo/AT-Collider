@@ -1,3 +1,6 @@
 [submodule "libs/ATL"]
 	path = libs/ATL
 	url = git://github.com/Kadoba/Advanced-Tiled-Loader.git
+[submodule "libs/atc"]
+	path = libs/atc
+	url = git@github.com:markandgo/AT-Collider.git
