@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32">
+  <image source="tiles.png" width="96" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="type" value="1"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="type" value="2"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="type" value="3"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="type" value="5"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="type" value="4"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2EEKg0AQBMAxxv9/OfGwIEJ2x9E9pQqEeJlDN6RJlohYJjzU9LJr2b6/z3Z6r96kb9THMfstxl2MbtL3dHavCTf/yZ7d+tCt1oU+6lp+vU6WH5/PjhtDTXajs1on1DzZxc5+3JPZj+z3lf24L7MfV2/po25Ghvqom5GdPuoy2e27sJ7eR7/rqRlld9zoNXKbrY+6Gf/t6gMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACDiA8QOAK0=
+  </data>
+ </layer>
+</map>
