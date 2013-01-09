@@ -186,7 +186,6 @@ function e:move(dx,dy)
 		gx2     = floor((x+dx)/mw)
 		gd      = -1
 	end
-	if dx == 0 then sideResolve = 'resolveX' end
 		
 	-- continuous collision detection by moving cell by cell
 	for tx = gx,gx2,gd do
@@ -223,7 +222,6 @@ function e:move(dx,dy)
 		gy2     = floor((y+dy)/mh)
 		gd      = -1
 	end
-	if dy == 0 then sideResolve = 'resolveY' end
 		
 	for ty = gy,gy2,gd do
 		if dy >= 0 then 

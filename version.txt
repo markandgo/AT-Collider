@@ -2,6 +2,7 @@ Advanced Tiled Collider
 
 [0.11]
 ===================
+	Index 0 is no longer required for height map arrays
 	Prevent checking the same tile twice for resolveX and resolveY by using updated position before checking the opposite sides.
 	Changed continuous collision detection to detect all sides when moving instead of the "front" sides
 
