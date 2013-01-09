@@ -40,7 +40,7 @@ function love.load()
 		h[i] = i
 	end
 	for i = 1,32 do
-		h2[i] = 32-i
+		h2[i] = 33-i
 	end
 	
 	atlMap.tiles[2].properties.horizontalHeightMap = h
