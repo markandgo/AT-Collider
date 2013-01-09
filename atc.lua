@@ -145,6 +145,7 @@ end
 function e:resolveX()
 	local gx,gy,gx2,gy2 = self:getRange()
 	self:rightSideResolve(gx2,gy,0,gy2-gy)
+	gx,gy,gx2,gy2 = self:getRange()
 	self:leftSideResolve(gx,gy,0,gy2-gy)
 end
 -----------------------------------------------------------
@@ -152,6 +153,7 @@ end
 function e:resolveY()
 	local gx,gy,gx2,gy2 = self:getRange()
 	self:bottomSideResolve(gx,gy2,gx2-gx,0)
+	gx,gy,gx2,gy2 = self:getRange()
 	self:topSideResolve(gx,gy,gx2-gx,0)
 end
 -----------------------------------------------------------
