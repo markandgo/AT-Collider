@@ -45,12 +45,12 @@ If false, the object ignores all tile collision
 
 ## Height Maps
 
-Vertical and horizontal height maps are supported for slopes. Just define an array (`verticalHeightMap` or `horizontalHeightMap`) of height values for each tile under `tile.properties`. The height value to be used is checked by the ends of each side. So for vertical height maps, the endpoints of the `bottom` or `top` sides are used to index the height values. For horizontal height maps, The endpoints of the `left` or `right` sides are used. Arrays must include **0** as a valid index.
+Vertical and horizontal height maps are supported for slopes. Just define an array (`verticalHeightMap` or `horizontalHeightMap`) of height values for each tile under `tile.properties`. The height value to be used is checked by the ends of each side. So for vertical height maps, the endpoints of the `bottom` or `top` sides are used to index the height values. For horizontal height maps, The endpoints of the `left` or `right` sides are used.
 
 ````lua
 -- create a 45 degree slope for a 32x32 tile
 local h = {}
-for i = 0,32 do
+for i = 1,32 do
 	h[i] = i
 end
 
