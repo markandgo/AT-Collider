@@ -9,7 +9,14 @@ function love.load()
 		-- use tile properties for our collision type
 		local tp = tile.properties
 		-- 1 is solid block
-		if tp.type  == 1 then return true end
+		if tp.type  == 1 then
+			if dx == 0 and dy == 0 then return true end
+			-- probably better to use different tile types with hash tables for ceiling/floor/wall instead of so many if statements.
+			if dx > 0 and side == 'right' then return true end
+			if dx <  0 and side == 'left' then return true end
+			if dy > 0 and side == 'bottom' then return true end
+			if dy <  0 and side == 'top' then return true end
+		end
 		
 		-- 2 is rising floor slope, 3 is lowering floor slope (left to right)
 		-- 4 is lowering ceiling slope, 5 is rising ceiling slope
