@@ -6,7 +6,7 @@ Check out the demo branch for example LOVE files: [Demo](https://github.com/mark
 
 Features:
 
-* Fully compatible with ATL 0.12 (Untested for other versions)
+* Requires ATL 0.12 (Untested for other versions)
 * Customizable collision callback for all sorts of possibilities
 * Supports the use of vertical/horizontal height maps for slopes
 * Continuous collision detection ensures that nothing is missed
@@ -45,18 +45,50 @@ If false, the object ignores all tile collision
 
 ## Height Maps
 
-Vertical and horizontal height maps are supported for slopes. Just define an array (`verticalHeightMap` or `horizontalHeightMap`) of height values for each tile under `tile.properties`. The height value to be used is checked by the ends of each side. So for vertical height maps, the endpoints of the `bottom` or `top` sides are used to index the height values. For horizontal height maps, The endpoints of the `left` or `right` sides are used.
+	Vertical and horizontal height maps are supported for slopes. Just define an array (`verticalHeightMap` or `horizontalHeightMap`) of height values for each tile under `tile.properties`. For an object's position, vertical height maps adjust it vertically, while horizontal height maps adjust it horizontally. See the following for how it works.
+	
+````
+ASCII ART EXAMPLE
 
-````lua
--- create a 45 degree slope for a 32x32 tile
-local h = {}
-for i = 1,32 do
-	h[i] = i
-end
+The following art shows the shape of a slope tile depending on which side touches it.
+=================
+4x4 tile example
 
--- set vertical and horizontal height maps
-tile.properties.verticalHeightMap   = h
-tile.properties.horizontalHeightMap = h
+tile.properties.verticalHeightMap = {1,2,3,4}
+
+**Vertical Height Map**
+
+"bottom"
+4				|
+3			| |
+2		| | |
+1	| | | |
+	1 2 3 4
+
+"top"
+1	| | | |
+2		| | |
+3			| |
+4				|
+	1 2 3 4
+			
+**Horizontal Height Map**
+
+tile.properties.horizontalHeightMap = {1,2,3,4}
+
+"left"
+1 =
+2 = =
+3 = = =
+4 = = = =
+	1 2 3 4
+	
+"right"
+1       =
+2     = =
+3   = = =
+4 = = = =
+	4 3 2 1
 ````
 
 ## Public Functions
