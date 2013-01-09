@@ -88,7 +88,7 @@ Draw the object where mode is `fill` or `line`.
 Returns `gx`,`gy`,`gx2`,`gy2`, which are the tile range occupied by the rectangle. `gx` and `gy` is the top left corner, `gx2`,`gy2` is the bottom right corner.
 
 **object.rightSideResolve**`(self,gx,gy,gw,gh)`  
-Resolve right side collision based on grid line. Either `gw` or `gh` must be 0.
+Resolve right side collision with a specified line of tiles. Either `gw` or `gh` must be 0. So for **rightSideResolve**, the grid line is vertical with `gw = 0`.
 
 **object.leftSideResolve**`(self,gx,gy,gw,gh)`  
 ...
