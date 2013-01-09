@@ -2,7 +2,7 @@ function love.load()
 	atl     = require 'libs.ATL'
 	atlMap  = atl.Loader.load 'map/map.tmx'
 	entity  = require 'libs.atc.atc'
-	player  = entity.new(32,32,31,31,atlMap,select(2,next(atlMap.layers)))
+	player  = entity.new(32,32,32,32,atlMap,select(2,next(atlMap.layers)))
 	
 	-- set up collision callbacks
 	function player:isResolvable(side,gx,gy,tile)
@@ -36,10 +36,10 @@ function love.load()
 	
 	-- set up heightmaps
 	local h = {}; local h2 = {}
-	for i = 0,32 do
+	for i = 1,32 do
 		h[i] = i
 	end
-	for i = 0,32 do
+	for i = 1,32 do
 		h2[i] = 32-i
 	end
 	
