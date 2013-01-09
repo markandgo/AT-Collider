@@ -59,7 +59,7 @@ function e:rightSideResolve(gx,gy,gw,gh)
 			local minx = self.x
 			local hmap = tile.properties.horizontalHeightMap
 			local ti,bi
-			if gy   ~= ty then ti = 0   else ti = floor(self.y-ty*mh)+1  end
+			if gy   ~= ty then ti = 1   else ti = floor(self.y-ty*mh)+1  end
 			if gy2  ~= ty then bi = mh  else bi = ceil(self.y+self.h-ty*mh) end
 			minx = min(self.x,(gx2+1)*mw-self.w-hmap[ti],(gx2+1)*mw-self.w-hmap[bi])
 			if minx ~= self.x and self:isResolvable('right',tx,ty,tile) then
@@ -82,7 +82,7 @@ function e:leftSideResolve(gx,gy,gw,gh)
 			local maxx = self.x
 			local hmap = tile.properties.horizontalHeightMap
 			local ti,bi
-			if gy   ~= ty then ti = 0   else ti = floor(self.y-ty*mh)+1  end
+			if gy   ~= ty then ti = 1   else ti = floor(self.y-ty*mh)+1  end
 			if gy2  ~= ty then bi = mh  else bi = ceil(self.y+self.h-ty*mh) end
 			maxx = max(self.x,gx*mw+hmap[ti],gx*mw+hmap[bi])
 			if maxx ~= self.x and self:isResolvable('left',tx,ty,tile) then
@@ -105,7 +105,7 @@ function e:bottomSideResolve(gx,gy,gw,gh)
 			local miny = self.y
 			local hmap = tile.properties.verticalHeightMap
 			local li,ri
-			if gx   ~= tx then li = 0   else li = floor(self.x-tx*mw)+1 end
+			if gx   ~= tx then li = 1   else li = floor(self.x-tx*mw)+1 end
 			if gx2  ~= tx then ri = mw  else ri = ceil((self.x+self.w)-tx*mw ) end
 			miny = min(self.y,(gy2+1)*mh-self.h-hmap[li],(gy2+1)*mh-self.h-hmap[ri])
 			if miny ~= self.y and self:isResolvable('bottom',tx,ty,tile) then
@@ -128,7 +128,7 @@ function e:topSideResolve(gx,gy,gw,gh)
 			local maxy = self.y
 			local hmap = tile.properties.verticalHeightMap
 			local li,ri
-			if gx   ~= tx then li = 0   else li = floor(self.x-tx*mw)+1 end
+			if gx   ~= tx then li = 1   else li = floor(self.x-tx*mw)+1 end
 			if gx2  ~= tx then ri = mw  else ri = ceil((self.x+self.w)-tx*mw ) end
 			maxy = max(self.y,gy*mh+hmap[li],gy*mh+hmap[ri])
 			if maxy ~= self.y and self:isResolvable('top',tx,ty,tile) then
