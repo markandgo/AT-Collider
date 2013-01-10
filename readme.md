@@ -45,8 +45,8 @@ If false, the object ignores all tile collision
 
 ## Height Maps
 
-	Vertical and horizontal height maps are supported for slopes. Just define an array (`verticalHeightMap` or `horizontalHeightMap`) of height values for each tile under `tile.properties`. For an object's position, vertical height maps adjust it vertically, while horizontal height maps adjust it horizontally. See the following for how it works.
-	
+Vertical and horizontal height maps are supported for slopes. Just define an array (`verticalHeightMap` or `horizontalHeightMap`) of height values for each tile under `tile.properties`. For an object's position, vertical height maps adjust it vertically, while horizontal height maps adjust it horizontally. See the following for how it works.
+
 ````
 ASCII ART EXAMPLE
 
