@@ -59,19 +59,19 @@ tile.properties.verticalHeightMap = {1,2,3,4}
 **Vertical Height Map**
 
 "bottom"
-4				|
-3			| |
-2		| | |
-1	| | | |
-	1 2 3 4
+4       |
+3     | |
+2   | | |
+1 | | | |
+  1 2 3 4
 
 "top"
-1	| | | |
-2		| | |
-3			| |
-4				|
-	1 2 3 4
-			
+1 | | | |
+2   | | |
+3     | |
+4       |
+  1 2 3 4
+
 **Horizontal Height Map**
 
 tile.properties.horizontalHeightMap = {1,2,3,4}
@@ -81,14 +81,14 @@ tile.properties.horizontalHeightMap = {1,2,3,4}
 2 = =
 3 = = =
 4 = = = =
-	1 2 3 4
-	
+  1 2 3 4
+
 "right"
 1       =
 2     = =
 3   = = =
 4 = = = =
-	4 3 2 1
+  4 3 2 1
 ````
 
 ## Public Functions
