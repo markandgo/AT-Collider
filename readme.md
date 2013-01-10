@@ -41,7 +41,7 @@ The associated ATL map for collision detection
 The associated tile layer for collision detection
 
 **object.isActive** (`default: true`)    
-If false, the object ignores all tile collision
+If false, the object ignores all tile collision with **object.move**  or  **object.moveTo** 
 
 ## Height Maps
 
