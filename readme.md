@@ -45,7 +45,7 @@ If false, the object ignores all tile collision with **object.move**  or  **obje
 
 ## Height Maps
 
-Vertical and horizontal height maps are supported for slopes. Just define an array (`verticalHeightMap` or `horizontalHeightMap`) of height values for each tile under `tile.properties`. For an object's position, vertical height maps adjust it vertically, while horizontal height maps adjust it horizontally. See the following for how it works.
+Vertical and horizontal height maps are supported for slopes. Just define an array (`verticalHeightMap` or `horizontalHeightMap`) of height values for each tile under `tile.properties`. For an object's position, vertical height maps adjust it vertically, while horizontal height maps adjust it horizontally. A tile can have both height maps at the same time. See the following for how it works.
 
 ````
 ASCII ART EXAMPLE
@@ -97,13 +97,16 @@ tile.properties.horizontalHeightMap = {1,2,3,4}
 Set the map and tile layer to be used.
 
 **object.isResolvable**`(self,side,gx,gy,tile)`  
-Collision callback for when the rectangle's **edges** overlap with a slope or tile. Returns true if the collision should be resolved. The `side` parameter is the side of the rectangle that detected the tile. `gx` and `gy` are the grid coordinates of the tile. The `side` parameter affects the direction the rectangle is moved to resolve the collision. For example, if `side` is `right`, the rectangle will be moved left.
+Collision callback for when the rectangle's **sides** overlap with a slope or tile. Returns true if the collision should be resolved. The `side` parameter is the side of the rectangle that detected the tile. `gx` and `gy` are the grid coordinates of the tile. The `side` parameter affects the direction the rectangle is moved to resolve the collision. For example, if `side` is `right`, the rectangle will be moved left.
 
 Valid `side`:  
 * `left`
 * `right`
 * `top`
 * `bottom`
+
+**NOTE**  
+It's possible for multiple sides to overlap the same tile. One can fall into the trap of resolving a tile collision more than once or with the wrong side! It's possible to avoid this by setting tiles to be floor, ceiling, or wall tiles and resolve collisions with specific sides. Another method is to resolve collision with specific sides depending on the direction of your movement.
 
 **object.moveTo**`(self,x,y)`  
 Move the object to `x`,`y` and resolve all collisions. No continuous collision detection is used.
