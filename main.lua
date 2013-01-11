@@ -1,50 +1,53 @@
+-- SIMPLE PLATFORMER EXAMPLE
+
 function love.load()
 	-- load libs and map
 	atl     = require 'libs.ATL'
 	atlMap  = atl.Loader.load 'map/map.tmx'
 	entity  = require 'libs.atc.atc'
 	
-	-- create player at x = 32, y = 32, width = 32, height = 32
+	-- create player at x = 32, y = 32, width = 20, height = 20
 	-- also we need to specify the map and tile layer for collision
-	player  = entity.new(32,32,32,32,atlMap,select(2,next(atlMap.layers)))
+	player  = entity.new(32,32,20,20,atlMap,select(2,next(atlMap.layers)))
 	
 -------------------------------------------------------------------------------
 	-- set up collision callback
 	-- this gets called whenever a side detects a tile/slope
 	-- callback needs to return true if you want the collision to be resolved
 	-- note that multiple sides can overlap the same tile
-	-- so it's up to you to determine which way you want to be "popped out"
-	-- because you don't know which side will invoke the callback first
+	-- (!) so it's possible that a tile is detected more than once per movement (!)
+	-- (!) so be careful of resolving a tile collision more than once (!)
 	function player:isResolvable(side,gx,gy,tile)
 		-- all the following tile properties can be set in Tiled
 		-- in this demo, I gave each tile a "type" value to differentiate them
 		local tp = tile.properties
 		
 		if tp.type  == 'solid' then
-			-- if the object isn't moving, just pop out from whichever side touches it first
-			if dx == 0 and dy == 0 then return true end
-			-- pop out in a specific direction depending on movement
-			-- we do dx,dy check because multiple sides can overlap the same tile
-			if dx > 0 and side == 'right' then return true end
-			if dx <  0 and side == 'left' then return true end
-			if dy > 0 and side == 'bottom' then return true end
-			if dy <  0 and side == 'top' then return true end
+			-- set to ground state if bottom sensor
+			if side == 'bottom' then inAir = false; vy = 0 end
+			return true
 		end
 		
+		-- A TILE CAN HAVE BOTH TYPES OF HEIGHT MAPS AT THE SAME TIME!
 		-- slope checks:
 		
-		-- for vertical height maps
+		-- in this demo, we give floor slopes vertical height maps
 		-- vertical height maps adjust an object's position vertically
-		if enableVerticalHeightMap then
-			if (tp.type == 'slopeUp' or tp.type == 'slopeDown') and side == 'bottom' then return true end
-			if (tp.type == 'ceilingUp' or tp.type == 'ceilingDown') and side == 'top' then return true end
+		if  (tp.type == 'slopeUp' or tp.type == 'slopeDown') and  side == 'bottom' then 
+			-- change to ground state
+			vy    = 0
+			inAir = false
+			return true 
 		end
 		
-		-- for horizontal height maps
+		-- in this demo, we give ceiling slopes horizontal height maps		
 		-- horizontal height maps adjust an object's position horizontally
-		if enableHorizontalHeightMap then
-			if (tp.type == 'slopeUp' or tp.type == 'ceilingDown') and side == 'right' then return true end
-			if (tp.type == 'slopeDown' or tp.type == 'ceilingUp') and side == 'left' then return true end
+		if tp.type == 'ceilingDown' and side == 'right' then 
+			return true 
+		end
+		
+		if tp.type == 'ceilingUp' and side == 'left' then 
+			return true 
 		end
 	end
 -------------------------------------------------------------------------------	
@@ -64,72 +67,53 @@ function love.load()
 	for id,tile in pairs(atlMap.tiles) do
 		local tp = tile.properties
 		if tp.type == 'slopeUp' then
-			tp.horizontalHeightMap = h
 			tp.verticalHeightMap   = h
 		elseif tp.type == 'slopeDown' then
-			tp.horizontalHeightMap = h
 			tp.verticalHeightMap   = h2
 		elseif tp.type == 'ceilingUp' then
 			tp.horizontalHeightMap = h2
-			tp.verticalHeightMap   = h2		
 		elseif tp.type == 'ceilingDown' then
 			tp.horizontalHeightMap = h2
-			tp.verticalHeightMap   = h
 		end
 	end
--------------------------------------------------------------------------------	
-	-- turn height detection on
-	enableHorizontalHeightMap = true
-	enableVerticalHeightMap   = true
-	
+-------------------------------------------------------------------------------		
 	-- player initial velocity
-	velocity = 400	
+	vx,vy    = 200,0
+	-- gravity
+	gravity  = 300
 end
 -------------------------------------------------------------------------------
 function love.draw()
-	love.graphics.setColor(255,255,255)
 	atlMap:draw()
 	player:draw('fill')
-	
-	love.graphics.translate(0,500)
-	love.graphics.setColor(255,255,255)
-	
-	love.graphics.print('Mouse wheel to change speed',32,0)
-	love.graphics.print('1 or 2 to toggle height maps. 3 to toggle collision detection',32,12)
-	love.graphics.print('Horizontal height map enable: ' .. tostring(enableHorizontalHeightMap),32,24)
-	love.graphics.print('Vertical height map enable: ' .. tostring(enableVerticalHeightMap),32,36)
-	love.graphics.print('Is active?: ' .. tostring(player.isActive),32,48)
-	love.graphics.print('velocity: '.. velocity,32,60)
-end
--------------------------------------------------------------------------------
-function love.keypressed(k)
-	if k == '1' then enableHorizontalHeightMap  = not enableHorizontalHeightMap end
-	if k == '2' then enableVerticalHeightMap    = not enableVerticalHeightMap   end
-	if k == '3' then player.isActive            = not player.isActive           end
+	love.graphics.print('Left mouse click to reposition the player',32,500)
+	love.graphics.print('Arrows to move',32,512)
 end
 -------------------------------------------------------------------------------
 function love.mousepressed(x,y,k)
 	if k == 'l' then player.x = x-player.w/2; player.y = y-player.h/2 end
-	if k == 'wu' then velocity = velocity + 100 end
-	if k == 'wd' then velocity = velocity - 100 end
 end
 -------------------------------------------------------------------------------
+local jump_time = 0
 function love.update(dt)
 	-- movement for player
 	if love.keyboard.isDown('left') then
-		dx   = -velocity*dt
+		dx   = -vx*dt
 	elseif love.keyboard.isDown('right') then
-		dx   = velocity*dt
+		dx   = vx*dt
 	else
 		dx   = 0
 	end
 	
-	if love.keyboard.isDown('up') then
-		dy   = -velocity*dt
-	elseif love.keyboard.isDown('down') then
-		dy   = velocity*dt
-	else
-		dy   = 0
+	-- apply gravity
+	vy = vy + gravity*dt
+	dy = vy*dt+gravity*dt^2/2
+	
+	-- prevent jumping more than once
+	if not inAir and love.keyboard.isDown('up') then
+		inAir = true
+		vy    = -vx
+		dy    = vy*dt
 	end
 	player:move(dx,dy)
 end
