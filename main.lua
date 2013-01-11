@@ -1,40 +1,57 @@
 function love.load()
+	-- load libs and map
 	atl     = require 'libs.ATL'
 	atlMap  = atl.Loader.load 'map/map.tmx'
 	entity  = require 'libs.atc.atc'
+	
+	-- create player at x = 32, y = 32, width = 32, height = 32
+	-- also we need to specify the map and tile layer for collision
 	player  = entity.new(32,32,32,32,atlMap,select(2,next(atlMap.layers)))
 	
-	-- set up collision callbacks
+-------------------------------------------------------------------------------
+	-- set up collision callback
+	-- this gets called whenever a side detects a tile/slope
+	-- callback needs to return true if you want the collision to be resolved
+	-- note that multiple sides can overlap the same tile
+	-- so it's up to you to determine which way you want to be "popped out"
+	-- because you don't know which side will invoke the callback first
 	function player:isResolvable(side,gx,gy,tile)
-		-- use tile properties for our collision type
+		-- all the following tile properties can be set in Tiled
+		-- in this demo, I gave each tile a "type" value to differentiate them
 		local tp = tile.properties
-		-- 1 is solid block
-		if tp.type  == 1 then
+		
+		if tp.type  == 'solid' then
+			-- if the object isn't moving, just pop out from whichever side touches it first
 			if dx == 0 and dy == 0 then return true end
-			-- probably better to use different tile types with hash tables for ceiling/floor/wall instead of so many if statements.
+			-- pop out in a specific direction depending on movement
+			-- we do dx,dy check because multiple sides can overlap the same tile
 			if dx > 0 and side == 'right' then return true end
 			if dx <  0 and side == 'left' then return true end
 			if dy > 0 and side == 'bottom' then return true end
 			if dy <  0 and side == 'top' then return true end
 		end
 		
-		-- 2 is rising floor slope, 3 is lowering floor slope (left to right)
-		-- 4 is lowering ceiling slope, 5 is rising ceiling slope
+		-- slope checks:
 		
 		-- for vertical height maps
-		if enableVerticalHeightMap then 
-			if (tp.type == 2 or tp.type == 3) and side == 'bottom' then return true end
-			if (tp.type == 4 or tp.type == 5) and side == 'top' then return true end
+		-- vertical height maps adjust an object's position vertically
+		if enableVerticalHeightMap then
+			if (tp.type == 'slopeUp' or tp.type == 'slopeDown') and side == 'bottom' then return true end
+			if (tp.type == 'ceilingUp' or tp.type == 'ceilingDown') and side == 'top' then return true end
 		end
 		
 		-- for horizontal height maps
+		-- horizontal height maps adjust an object's position horizontally
 		if enableHorizontalHeightMap then
-			if (tp.type == 2 or tp.type == 4) and side == 'right' then return true end
-			if (tp.type == 5 or tp.type == 3) and side == 'left' then return true end
+			if (tp.type == 'slopeUp' or tp.type == 'ceilingDown') and side == 'right' then return true end
+			if (tp.type == 'slopeDown' or tp.type == 'ceilingUp') and side == 'left' then return true end
 		end
 	end
-	
+-------------------------------------------------------------------------------	
 	-- set up heightmaps
+	-- Inspiration:
+	-- http://info.sonicretro.org/SPG:Solid_Tiles
+	-- 45 degree angle:
 	local h = {}; local h2 = {}
 	for i = 1,32 do
 		h[i] = i
@@ -43,24 +60,32 @@ function love.load()
 		h2[i] = 33-i
 	end
 	
-	atlMap.tiles[2].properties.horizontalHeightMap = h
-	atlMap.tiles[3].properties.horizontalHeightMap = h
-	atlMap.tiles[4].properties.horizontalHeightMap = h2
-	atlMap.tiles[5].properties.horizontalHeightMap = h2	
-	
-	atlMap.tiles[2].properties.verticalHeightMap = h
-	atlMap.tiles[3].properties.verticalHeightMap = h2
-	atlMap.tiles[5].properties.verticalHeightMap = h
-	atlMap.tiles[4].properties.verticalHeightMap = h2	
-	
+	-- assign height maps to approriate tiles
+	for id,tile in pairs(atlMap.tiles) do
+		local tp = tile.properties
+		if tp.type == 'slopeUp' then
+			tp.horizontalHeightMap = h
+			tp.verticalHeightMap   = h
+		elseif tp.type == 'slopeDown' then
+			tp.horizontalHeightMap = h
+			tp.verticalHeightMap   = h2
+		elseif tp.type == 'ceilingUp' then
+			tp.horizontalHeightMap = h2
+			tp.verticalHeightMap   = h2		
+		elseif tp.type == 'ceilingDown' then
+			tp.horizontalHeightMap = h2
+			tp.verticalHeightMap   = h
+		end
+	end
+-------------------------------------------------------------------------------	
 	-- turn height detection on
 	enableHorizontalHeightMap = true
 	enableVerticalHeightMap   = true
 	
-	-- entity velocity
+	-- player initial velocity
 	velocity = 400	
 end
-
+-------------------------------------------------------------------------------
 function love.draw()
 	love.graphics.setColor(255,255,255)
 	atlMap:draw()
@@ -76,19 +101,19 @@ function love.draw()
 	love.graphics.print('Is active?: ' .. tostring(player.isActive),32,48)
 	love.graphics.print('velocity: '.. velocity,32,60)
 end
-
+-------------------------------------------------------------------------------
 function love.keypressed(k)
 	if k == '1' then enableHorizontalHeightMap  = not enableHorizontalHeightMap end
 	if k == '2' then enableVerticalHeightMap    = not enableVerticalHeightMap   end
 	if k == '3' then player.isActive            = not player.isActive           end
 end
-
+-------------------------------------------------------------------------------
 function love.mousepressed(x,y,k)
 	if k == 'l' then player.x = x-player.w/2; player.y = y-player.h/2 end
 	if k == 'wu' then velocity = velocity + 100 end
 	if k == 'wd' then velocity = velocity - 100 end
 end
-
+-------------------------------------------------------------------------------
 function love.update(dt)
 	-- movement for player
 	if love.keyboard.isDown('left') then
