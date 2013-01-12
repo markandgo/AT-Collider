@@ -48,8 +48,8 @@ function e:rightSideResolve(gx,gy,gw,gh)
 	local newx    = self.x
 	-- right sensor check
 	for tx,ty,tile in self.tileLayer:rectangle(gx,gy,gw,gh) do
-		-- do two point check for slope height
-		-- first point is the edge itself, second point is the opposite end of the tile
+		-- do two checks
+		-- first is the endpoints of the side for slopes, second is the edge itself for solid tiles
 		if tile.properties.horizontalHeightMap then
 			local minx = self.x
 			local hmap = tile.properties.horizontalHeightMap
