@@ -55,15 +55,13 @@ function e:rightSideResolve(gx,gy,gw,gh)
 		if tile then
 			-- check if tile is a slope
 			if tile.properties.horizontalHeightMap then
-				local minx = self.x
 				local hmap = tile.properties.horizontalHeightMap
-				local ti,bi
 				-- use endpoints to check for collision
 				-- convert endpoints of side into height index
-				if gy   ~= ty then ti = 1   else ti = floor(self.y-ty*mh)+1  end
-				if gy2  ~= ty then bi = mh  else bi = ceil(self.y+self.h-ty*mh) end
+				local ti = gy ~= ty and 1 or floor(self.y-ty*mh)+1
+				local bi = gy2 ~= ty and mh or ceil(self.y+self.h-ty*mh)
 				-- take the farthest position from the slope 
-				minx = min(self.x,(tx+1)*mw-self.w-hmap[ti],(tx+1)*mw-self.w-hmap[bi])
+				local minx = min(self.x,(tx+1)*mw-self.w-hmap[ti],(tx+1)*mw-self.w-hmap[bi])
 				-- if the new position is not same as the original position
 				-- then we have a slope overlap
 				if minx ~= self.x and self:isResolvable('right',tx,ty,tile) then
@@ -88,12 +86,10 @@ function e:leftSideResolve(gx,gy,gw,gh)
 		tile = tL(tx,ty)
 		if tile then
 			if tile.properties.horizontalHeightMap then
-				local maxx = self.x
 				local hmap = tile.properties.horizontalHeightMap
-				local ti,bi
-				if gy   ~= ty then ti = 1   else ti = floor(self.y-ty*mh)+1  end
-				if gy2  ~= ty then bi = mh  else bi = ceil(self.y+self.h-ty*mh) end
-				maxx = max(self.x,tx*mw+hmap[ti],tx*mw+hmap[bi])
+				local ti   = gy ~= ty and 1 or floor(self.y-ty*mh)+1
+				local bi   = gy2 ~= ty and mh or ceil(self.y+self.h-ty*mh)
+				local maxx = max(self.x,tx*mw+hmap[ti],tx*mw+hmap[bi])
 				if maxx ~= self.x and self:isResolvable('left',tx,ty,tile) then
 					newx = max(maxx,newx)
 				end
@@ -116,12 +112,10 @@ function e:bottomSideResolve(gx,gy,gw,gh)
 		tile = tL(tx,ty)
 		if tile then
 			if tile.properties.verticalHeightMap then
-				local miny = self.y
 				local hmap = tile.properties.verticalHeightMap
-				local li,ri
-				if gx   ~= tx then li = 1   else li = floor(self.x-tx*mw)+1 end
-				if gx2  ~= tx then ri = mw  else ri = ceil((self.x+self.w)-tx*mw ) end
-				miny = min(self.y,(ty+1)*mh-self.h-hmap[li],(ty+1)*mh-self.h-hmap[ri])
+				local li   = gx ~= tx and 1 or floor(self.x-tx*mw)+1
+				local ri   = gx2 ~= tx and mw or ceil((self.x+self.w)-tx*mw)
+				local miny = min(self.y,(ty+1)*mh-self.h-hmap[li],(ty+1)*mh-self.h-hmap[ri])
 				if miny ~= self.y and self:isResolvable('bottom',tx,ty,tile) then
 					newy = min(miny,newy)
 				end
@@ -144,12 +138,10 @@ function e:topSideResolve(gx,gy,gw,gh)
 		tile = tL(tx,ty)
 		if tile then
 			if tile.properties.verticalHeightMap then
-				local maxy = self.y
 				local hmap = tile.properties.verticalHeightMap
-				local li,ri
-				if gx   ~= tx then li = 1   else li = floor(self.x-tx*mw)+1 end
-				if gx2  ~= tx then ri = mw  else ri = ceil((self.x+self.w)-tx*mw ) end
-				maxy = max(self.y,ty*mh+hmap[li],ty*mh+hmap[ri])
+				local li   = gx ~= tx and 1 or floor(self.x-tx*mw)+1
+				local ri   = gx2 ~= tx and mw or ceil((self.x+self.w)-tx*mw)
+				local maxy = max(self.y,ty*mh+hmap[li],ty*mh+hmap[ri])
 				if maxy ~= self.y and self:isResolvable('top',tx,ty,tile) then
 					newy = max(maxy,newy)
 				end
