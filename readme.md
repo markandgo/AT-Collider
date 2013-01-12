@@ -93,11 +93,8 @@ tile.properties.horizontalHeightMap = {1,2,3,4}
 
 ## Public Functions
 
-**object.setMapAndLayer**`(self,map,layer)`  
-Set the map and tile layer to be used.
-
 **object.isResolvable**`(self,side,gx,gy,tile)`  
-Collision callback for when the rectangle's **sides** overlap with a slope or tile. Returns true if the collision should be resolved. The `side` parameter is the side of the rectangle that detected the tile. `gx` and `gy` are the grid coordinates of the tile. The `side` parameter affects the direction the rectangle is moved to resolve the collision. For example, if `side` is `right`, the rectangle will be moved left.
+Collision callback for when a rectangle's `side` overlaps with a slope or tile. Returns true if the collision should be resolved. The `side` parameter is the side of the rectangle that detected the tile. `gx` and `gy` are the grid coordinates of the tile. The `side` parameter affects the direction the rectangle is moved to resolve the collision. For example, if `side` is `right`, the rectangle will be moved left.
 
 Valid `side`:  
 * `left`
