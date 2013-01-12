@@ -30,11 +30,6 @@ e.new     = function(x,y,w,h,map,tileLayer)
 	return setmetatable(t,e)
 end
 -----------------------------------------------------------
--- set map and tile layer for collision
-function e:setMapAndLayer(map,tileLayer)
-	self.map = map; self.tileLayer = tileLayer
-end
------------------------------------------------------------
 -- get the range of tiles that are occupied
 function e:getRange()
 	local mw,mh   = self.map.tileWidth,self.map.tileHeight
