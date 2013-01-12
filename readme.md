@@ -41,7 +41,10 @@ The associated ATL map for collision detection
 The associated tile layer for collision detection
 
 **object.isActive** (`default: true`)    
-If false, the object ignores all tile collision with **object.move**  or  **object.moveTo** 
+If `false`, the object ignores all tile collision with **object.move** or **object.moveTo** 
+
+**object.isBullet** (`default: false`)  
+If `true`, use continuous collision detection with **object.move** or **object.moveTo**. `false` is default for best performance.
 
 ## Height Maps
 
@@ -106,10 +109,10 @@ Valid `side`:
 It's possible for multiple sides to overlap the same tile. One can fall into the trap of resolving a tile collision more than once or with the wrong side! It's possible to avoid this by setting tiles to be floor, ceiling, or wall tiles and resolve collisions with specific sides. Another method is to resolve collision with specific sides depending on the direction of your movement.
 
 **object.moveTo**`(self,x,y)`  
-Move the object to `x`,`y` and resolve all collisions. No continuous collision detection is used.
+Move the object to `x`,`y` and resolve all collisions. If `object.isBullet` is `true`, continuous collision detection is used to prevent tunneling through tiles. Horizontal movements are applied before vertical movements.
 
 **object.move**`(self,dx,dy)`  
-Move the object by `dx`,`dy` amounts and resolve all collisions. Continuous collision detection is used to prevent tunneling through tiles at extreme speeds. Note that movements are broken down into horizontal and vertical movements. Horizontal movements are applied before vertical movements.
+Move the object by `dx`,`dy` amounts and resolve all collisions.
 
 **object.draw**`(self,mode)`  
 Draw the object where mode is `fill` or `line`.

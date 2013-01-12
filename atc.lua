@@ -26,6 +26,7 @@ e.new     = function(x,y,w,h,map,tileLayer)
 		map         = map,
 		tileLayer   = tileLayer,
 		isActive    = true,
+		isBullet    = false,
 	}
 	return setmetatable(t,e)
 end
@@ -170,19 +171,18 @@ function e:resolveY()
 	self:topSideResolve(gx,gy,gx2-gx,0)
 end
 -----------------------------------------------------------
--- set position and apply collision correction if active
-function e:moveTo(x,y)
-	if not self.isActive then self.x,self.y = x,y return end
-	self.x = x
-	self:resolveX()
-	self.y = y
-	self:resolveY()
-end
------------------------------------------------------------
 -- delta movement and apply collision correction
--- apply continuous collision detection as well
+-- do continuous collision detection if bullet
 function e:move(dx,dy)
 	if not self.isActive then self.x,self.y = self.x+dx,self.y+dy return end
+	if not self.isBullet then
+		self.x = self.x+dx
+		self:resolveX()
+		self.y = self.y+dy
+		self:resolveY()
+		return
+	end
+	
 	local mw,mh   = self.map.tileWidth,self.map.tileHeight
 	local gx,gy,gx2,gy2,x,oldx,y,oldy,newx,newy,gd,least
 	-----------------------------------------------------------
@@ -251,6 +251,11 @@ function e:move(dx,dy)
 			gx,_,gx2,_ = self:getRange()
 		end
 	end	
+end
+-----------------------------------------------------------
+-- set position
+function e:moveTo(x,y)
+	self:move(x-self.x,y-self.y)
 end
 -----------------------------------------------------------
 function e:draw(mode)

@@ -2,6 +2,7 @@ Advanced Tiled Collider
 
 [0.12]
 ===================
+	Added isBullet property to toggle continuous collision detection.
 	setMapAndLayer removed
 	Misc code cleanup/tweak
 
