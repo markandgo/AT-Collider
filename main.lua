@@ -94,7 +94,6 @@ function love.mousepressed(x,y,k)
 	if k == 'l' then player.x = x-player.w/2; player.y = y-player.h/2 end
 end
 -------------------------------------------------------------------------------
-local jump_time = 0
 function love.update(dt)
 	-- movement for player
 	if love.keyboard.isDown('left') then
