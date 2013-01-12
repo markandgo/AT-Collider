@@ -53,15 +53,19 @@ function e:rightSideResolve(gx,gy,gw,gh)
 	for ty = gy,gy2 do 
 		tile = tL(tx,ty)
 		if tile then
-			-- do two checks
-			-- first is the endpoints of the side for slopes, second is the edge itself for solid tiles
+			-- check if tile is a slope
 			if tile.properties.horizontalHeightMap then
 				local minx = self.x
 				local hmap = tile.properties.horizontalHeightMap
 				local ti,bi
+				-- use endpoints to check for collision
+				-- convert endpoints of side into height index
 				if gy   ~= ty then ti = 1   else ti = floor(self.y-ty*mh)+1  end
 				if gy2  ~= ty then bi = mh  else bi = ceil(self.y+self.h-ty*mh) end
+				-- take the farthest position from the slope 
 				minx = min(self.x,(tx+1)*mw-self.w-hmap[ti],(tx+1)*mw-self.w-hmap[bi])
+				-- if the new position is not same as the original position
+				-- then we have a slope overlap
 				if minx ~= self.x and self:isResolvable('right',tx,ty,tile) then
 					newx = min(minx,newx)
 				end
