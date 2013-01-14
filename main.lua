@@ -10,6 +10,9 @@ function love.load()
 	-- also we need to specify the map and tile layer for collision
 	player  = entity.new(32,32,20,20,atlMap,select(2,next(atlMap.layers)))
 	
+	-- enabled so we don't pass through seam between slope tile and solid tile
+	player.isBullet = true
+	
 -------------------------------------------------------------------------------
 	-- set up collision callback
 	-- this gets called whenever a side detects a tile/slope
