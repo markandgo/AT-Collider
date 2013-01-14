@@ -1,6 +1,6 @@
 # Advanced Tiled Collider
 
-Advanced Tiled Collider (ATC) is a collision module for Advanced Tiled Loader (ATL) [Link](https://github.com/Kadoba/Advanced-Tiled-Loader).
+Advanced Tiled Collider (ATC) is a collision class for Advanced Tiled Loader (ATL) [Link](https://github.com/Kadoba/Advanced-Tiled-Loader).
 
 Check out the demo branch for example LOVE files: [Demo](https://github.com/markandgo/AT-Collider/tree/demo)
 
@@ -16,8 +16,7 @@ Limitations:
 * Isometric orientation is not supported
 * ATL offsets ( **offsetX** and **offsetY** ) aren't handled correctly
 
-To load and create a new collision object:
-
+To load the class and create a new collision object:  
 ````lua
 atc     = require 'atc'
 object  = atc.new(x,y,width,height,map,tileLayer)
@@ -25,31 +24,31 @@ object  = atc.new(x,y,width,height,map,tileLayer)
 
 ## Properties
 
-The collision module creates a collision object that can interact with an ATL map. The object is a rectangle and has the following properties:
+The collision class creates a collision object that can interact with an ATL map. The object is a rectangle and has the following properties:
 
-**object.x**  
+**atc.x** (`default: nil`)
 The top left x position of the rectangle
 
-**object.y**  
+**atc.y** (`default: nil`) 
 The top left y position of the rectangle
 
-**object.w**  
+**atc.w** (`default: nil`)
 The width of the rectangle
 
-**object.h**  
+**atc.h** (`default: nil`) 
 The height of the rectangle
 
-**object.map**  
+**atc.map** (`default: nil`) 
 The associated ATL map for collision detection
 
-**object.tileLayer**  
+**atc.tileLayer** (`default: nil`) 
 The associated tile layer for collision detection
 
-**object.isActive** (`default: true`)    
-If `false`, the object ignores all tile collision with **object.move** or **object.moveTo** 
+**atc.isActive** (`default: true`)    
+If `false`, the object ignores all tile collision with **atc.move** or **atc.moveTo** 
 
-**object.isBullet** (`default: false`)  
-If `true`, use continuous collision detection with **object.move** or **object.moveTo**. `false` is default for best performance.
+**atc.isBullet** (`default: false`)  
+If `true`, use continuous collision detection with **atc.move** or **atc.moveTo**. `false` is default for best performance.
 
 ## Height Maps
 
@@ -101,7 +100,10 @@ tile.properties.horizontalHeightMap = {1,2,3,4}
 
 ## Public Functions
 
-**object.isResolvable**`(self,side,gx,gy,tile)`  
+**NOTE**  
+All objects inherit the class functions and data. One function of particular importance is **isResolvable**; one can define it in **atc** or define it per **object**.
+
+**atc.isResolvable**`(object,side,gx,gy,tile)`  
 Collision callback for when a rectangle's `side` overlaps with a slope or tile. Returns true if the collision should be resolved. The `side` parameter is the side of the rectangle that detected the tile. `gx` and `gy` are the grid coordinates of the tile. The `side` parameter affects the direction the rectangle is moved to resolve the collision. For example, if `side` is `right`, the rectangle will be moved left.
 
 Valid `side`:  
@@ -113,34 +115,34 @@ Valid `side`:
 **NOTE**  
 It's possible for multiple sides to overlap the same tile. One can fall into the trap of resolving a tile collision more than once or with the wrong side! It's possible to avoid this by setting tiles to be floor, ceiling, or wall tiles and resolve collisions with specific sides. Another method is to resolve collision with specific sides depending on the direction of your movement.
 
-**object.moveTo**`(self,x,y)`  
-Move the object to `x`,`y` and resolve all collisions. If `object.isBullet` is `true`, continuous collision detection is used to prevent tunneling through tiles. Horizontal movements are applied before vertical movements.
+**atc.moveTo**`(object,x,y)`  
+Move the object to `x`,`y` and resolve all collisions. If `atc.isBullet` is `true`, continuous collision detection is used to prevent tunneling through tiles. Horizontal movements are applied before vertical movements.
 
-**object.move**`(self,dx,dy)`  
+**atc.move**`(object,dx,dy)`  
 Move the object by `dx`,`dy` amounts and resolve all collisions.
 
-**object.draw**`(self,mode)`  
+**atc.draw**`(object,mode)`  
 Draw the object where mode is `fill` or `line`.
 
 ## Private Functions
 
-**object.getRange**`(self)`  
+**atc.getRange**`(object)`  
 Returns `gx`,`gy`,`gx2`,`gy2`, which are the tile range occupied by the rectangle. `gx` and `gy` is the top left corner, `gx2`,`gy2` is the bottom right corner.
 
-**object.rightSideResolve**`(self,gx,gy,gw,gh)`  
+**atc.rightSideResolve**`(object,gx,gy,gw,gh)`  
 Resolve right side collision with a specified line of tiles. Either `gw` or `gh` must be 0. So for **rightSideResolve**, the grid line is vertical with `gw = 0`.
 
-**object.leftSideResolve**`(self,gx,gy,gw,gh)`  
+**atc.leftSideResolve**`(object,gx,gy,gw,gh)`  
 ...
 
-**object.topSideResolve**`(self,gx,gy,gw,gh)`  
+**atc.topSideResolve**`(object,gx,gy,gw,gh)`  
 ...
 
-**object.bottomSideResolve**`(self,gx,gy,gw,gh)`  
+**atc.bottomSideResolve**`(object,gx,gy,gw,gh)`  
 ....
 
-**object.resolveX**`(self)`  
+**atc.resolveX**`(object)`  
 Resolve right and left side collisions
 
-**object.resolveY**`(self)`  
+**atc.resolveY**`(object)`  
 Resolve top and bottom side collisions
