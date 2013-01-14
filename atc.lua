@@ -14,7 +14,12 @@ local max   = math.max
 local min   = math.min
 -----------------------------------------------------------
 -- class
-local e   = {class = 'collider'}
+local e   = 
+	{
+	class    = 'collider',
+	isActive = true,
+	isBullet = false,
+	}
 e.__index = e
 e.new     = function(x,y,w,h,map,tileLayer)
 	local t =
@@ -25,8 +30,6 @@ e.new     = function(x,y,w,h,map,tileLayer)
 		h           = h,
 		map         = map,
 		tileLayer   = tileLayer,
-		isActive    = true,
-		isBullet    = false,
 	}
 	return setmetatable(t,e)
 end
