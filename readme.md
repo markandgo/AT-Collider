@@ -11,6 +11,11 @@ Features:
 * Supports the use of vertical/horizontal height maps for slopes
 * Continuous collision detection ensures that nothing is missed
 
+Limitations:
+
+* Isometric orientation is not supported
+* ATL offsets ( **offsetX** and **offsetY** ) aren't handled correctly
+
 To load and create a new collision object:
 
 ````lua
