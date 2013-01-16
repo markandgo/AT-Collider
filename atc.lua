@@ -1,5 +1,5 @@
 --[[
-Advanced Tiled Collider Version 0.12
+Advanced Tiled Collider Version 0.13
 Copyright (c) 2013 Minh Ngo
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -35,8 +35,7 @@ e.new     = function(x,y,w,h,map,tileLayer)
 end
 -----------------------------------------------------------
 local mw,mh,gx,gy,gx2,gy2
--- get the range of tiles that are occupied
-function e:getRange()
+function e:getTileRange()
 	mw,mh   = self.map.tileWidth,self.map.tileHeight
 	gx,gy   = floor(self.x/mw),floor(self.y/mh)
 	gx2,gy2 = ceil( (self.x+self.w)/mw )-1,ceil( (self.y+self.h)/mh )-1
@@ -47,11 +46,11 @@ end
 function e:isResolvable(side,gx,gy,tile)
 end
 -----------------------------------------------------------
-function e:rightSideResolve(gx,gy,gw,gh)
-	local gy2     = gy+gh
+function e:rightSideResolve()
+	local gx,gy,gx2,gy2 = self:getRange()
 	local mw,mh   = self.map.tileWidth,self.map.tileHeight
 	local newx    = self.x
-	local tx,tile = gx
+	local tx,tile = gx2
 	local tL      = self.tileLayer
 	-- right sensor check
 	for ty = gy,gy2 do 
@@ -79,13 +78,12 @@ function e:rightSideResolve(gx,gy,gw,gh)
 	self.x = newx
 end
 -----------------------------------------------------------
-function e:leftSideResolve(gx,gy,gw,gh)
-	local gy2     = gy+gh
+function e:leftSideResolve()
+	local gx,gy,gx2,gy2 = self:getRange()
 	local mw,mh   = self.map.tileWidth,self.map.tileHeight
 	local newx    = self.x
 	local tx,tile = gx
 	local tL      = self.tileLayer
-	-- left sensor check
 	for ty = gy,gy2 do 
 		tile = tL(tx,ty)
 		if tile then
@@ -105,13 +103,12 @@ function e:leftSideResolve(gx,gy,gw,gh)
 	self.x = newx
 end
 -----------------------------------------------------------
-function e:bottomSideResolve(gx,gy,gw,gh)
-	local gx2     = gx+gw
+function e:bottomSideResolve()
+	local gx,gy,gx2,gy2 = self:getRange()
 	local mw,mh   = self.map.tileWidth,self.map.tileHeight
 	local newy    = self.y
-	local ty,tile = gy
+	local ty,tile = gy2
 	local tL      = self.tileLayer
-	-- bottom sensor check
 	for tx = gx,gx2 do
 		tile = tL(tx,ty)
 		if tile then
@@ -131,13 +128,12 @@ function e:bottomSideResolve(gx,gy,gw,gh)
 	self.y = newy
 end
 -----------------------------------------------------------
-function e:topSideResolve(gx,gy,gw,gh)
-	local gx2     = gx+gw
+function e:topSideResolve()
+	local gx,gy,gx2,gy2 = self:getRange()
 	local mw,mh   = self.map.tileWidth,self.map.tileHeight
 	local newy    = self.y
 	local ty,tile = gy
 	local tL      = self.tileLayer
-	-- top sensor check
 	for tx = gx,gx2 do
 		tile = tL(tx,ty)
 		if tile then
@@ -157,25 +153,16 @@ function e:topSideResolve(gx,gy,gw,gh)
 	self.y = newy
 end
 -----------------------------------------------------------
-local gx,gy,gx2,gy2
--- resolve x position
 function e:resolveX()
-	gx,gy,gx2,gy2 = self:getRange()
-	self:rightSideResolve(gx2,gy,0,gy2-gy)
-	gx,gy,gx2,gy2 = self:getRange()
-	self:leftSideResolve(gx,gy,0,gy2-gy)
+	self:rightSideResolve()
+	self:leftSideResolve()
 end
 -----------------------------------------------------------
--- resolve y position
 function e:resolveY()
-	gx,gy,gx2,gy2 = self:getRange()
-	self:bottomSideResolve(gx,gy2,gx2-gx,0)
-	gx,gy,gx2,gy2 = self:getRange()
-	self:topSideResolve(gx,gy,gx2-gx,0)
+	self:bottomSideResolve()
+	self:topSideResolve()
 end
 -----------------------------------------------------------
--- delta movement and apply collision correction
--- do continuous collision detection if bullet
 function e:move(dx,dy)
 	if not self.isActive then self.x,self.y = self.x+dx,self.y+dy return end
 	if not self.isBullet then
@@ -206,7 +193,6 @@ function e:move(dx,dy)
 		
 	-- continuous collision detection by moving cell by cell
 	for tx = gx,gx2,gd do
-		-- take shortest path from dx or snapping to grid
 		if dx >= 0 then 
 			self.x = least((tx+1)*mw-self.w,oldx+dx) 
 		else 
@@ -219,7 +205,7 @@ function e:move(dx,dy)
 		oldy = self.y
 		-- height correction so we can continue moving horizontally
 		self:resolveY()
-		-- if there was a slope collision, get new height range
+		-- get new height range
 		if self.y ~= oldy then 
 			_,gy,_,gy2 = self:getRange()
 		end
@@ -256,7 +242,6 @@ function e:move(dx,dy)
 	end	
 end
 -----------------------------------------------------------
--- set position
 function e:moveTo(x,y)
 	self:move(x-self.x,y-self.y)
 end

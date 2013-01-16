@@ -1,5 +1,10 @@
 Advanced Tiled Collider
 
+[0.13]
+===================
+	Removed parameters for side resolve functions
+	getRange renamed to getTileRange
+
 [0.12]
 ===================
 	Added isBullet property to toggle continuous collision detection.

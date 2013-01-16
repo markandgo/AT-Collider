@@ -126,19 +126,19 @@ Draw the object where mode is `fill` or `line`.
 
 ## Private Functions
 
-**atc.getRange**`(object)`  
+**atc.getTileRange**`(object)`  
 Returns `gx`,`gy`,`gx2`,`gy2`, which are the tile range occupied by the rectangle. `gx` and `gy` is the top left corner, `gx2`,`gy2` is the bottom right corner.
 
-**atc.rightSideResolve**`(object,gx,gy,gw,gh)`  
-Resolve right side collision with a specified line of tiles. Either `gw` or `gh` must be 0. So for **rightSideResolve**, the grid line is vertical with `gw = 0`.
+**atc.rightSideResolve**`(object)`  
+Resolve right side collision. For **rightSideResolve**, any tile that overlaps the rectangle's right line is checked for collision.
 
-**atc.leftSideResolve**`(object,gx,gy,gw,gh)`  
+**atc.leftSideResolve**`(object)`  
 ...
 
-**atc.topSideResolve**`(object,gx,gy,gw,gh)`  
+**atc.topSideResolve**`(object)`  
 ...
 
-**atc.bottomSideResolve**`(object,gx,gy,gw,gh)`  
+**atc.bottomSideResolve**`(object)`  
 ....
 
 **atc.resolveX**`(object)`  
