@@ -47,7 +47,7 @@ function e:isResolvable(side,gx,gy,tile)
 end
 -----------------------------------------------------------
 function e:rightSideResolve()
-	local gx,gy,gx2,gy2 = self:getRange()
+	local gx,gy,gx2,gy2 = self:getTileRange()
 	local mw,mh   = self.map.tileWidth,self.map.tileHeight
 	local newx    = self.x
 	local tx,tile = gx2
@@ -79,7 +79,7 @@ function e:rightSideResolve()
 end
 -----------------------------------------------------------
 function e:leftSideResolve()
-	local gx,gy,gx2,gy2 = self:getRange()
+	local gx,gy,gx2,gy2 = self:getTileRange()
 	local mw,mh   = self.map.tileWidth,self.map.tileHeight
 	local newx    = self.x
 	local tx,tile = gx
@@ -104,7 +104,7 @@ function e:leftSideResolve()
 end
 -----------------------------------------------------------
 function e:bottomSideResolve()
-	local gx,gy,gx2,gy2 = self:getRange()
+	local gx,gy,gx2,gy2 = self:getTileRange()
 	local mw,mh   = self.map.tileWidth,self.map.tileHeight
 	local newy    = self.y
 	local ty,tile = gy2
@@ -129,7 +129,7 @@ function e:bottomSideResolve()
 end
 -----------------------------------------------------------
 function e:topSideResolve()
-	local gx,gy,gx2,gy2 = self:getRange()
+	local gx,gy,gx2,gy2 = self:getTileRange()
 	local mw,mh   = self.map.tileWidth,self.map.tileHeight
 	local newy    = self.y
 	local ty,tile = gy
@@ -177,7 +177,7 @@ function e:move(dx,dy)
 	local gx,gy,gx2,gy2,x,oldx,y,oldy,newx,newy,gd,least
 	-----------------------------------------------------------
 	-- x direction collision detection
-	gx,gy,gx2,gy2 = self:getRange()
+	gx,gy,gx2,gy2 = self:getTileRange()
 	x,oldx        = self.x,self.x
 	
 	local gd,least
@@ -207,12 +207,12 @@ function e:move(dx,dy)
 		self:resolveY()
 		-- get new height range
 		if self.y ~= oldy then 
-			_,gy,_,gy2 = self:getRange()
+			_,gy,_,gy2 = self:getTileRange()
 		end
 	end	
 	-----------------------------------------------------------
 	-- y direction collision detection
-	gx,gy,gx2,gy2 = self:getRange()
+	gx,gy,gx2,gy2 = self:getTileRange()
 	y,oldy        = self.y,self.y
 	
 	if dy >= 0 then
@@ -237,7 +237,7 @@ function e:move(dx,dy)
 		oldx = self.x
 		self:resolveX()
 		if self.x ~= oldx then
-			gx,_,gx2,_ = self:getRange()
+			gx,_,gx2,_ = self:getTileRange()
 		end
 	end	
 end
