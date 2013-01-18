@@ -103,7 +103,7 @@ tile.properties.horizontalHeightMap = {1,2,3,4}
 **NOTE**  
 All objects inherit the class functions and data. One function of particular importance is **isResolvable**; one can define it in **atc** or define it per **object**.
 
-**atc.isResolvable**`(object,side,gx,gy,tile)`  
+`boolean` = **atc.isResolvable**`(object,side,gx,gy,tile)`  
 Collision callback for when a rectangle's `side` overlaps with a slope or tile. Returns true if the collision should be resolved. The `side` parameter is the side of the rectangle that detected the tile. `gx` and `gy` are the grid coordinates of the tile. The `side` parameter affects the direction the rectangle is moved to resolve the collision. For example, if `side` is `right`, the rectangle will be moved left.
 
 Valid `side`:  
@@ -126,7 +126,7 @@ Draw the object where mode is `fill` or `line`.
 
 ## Private Functions
 
-**atc.getTileRange**`(object)`  
+`gx,gy,gx2,gy2` = **atc.getTileRange**`(object)`  
 Returns `gx`,`gy`,`gx2`,`gy2`, which are the tile range occupied by the rectangle. `gx` and `gy` is the top left corner, `gx2`,`gy2` is the bottom right corner.
 
 **atc.rightSideResolve**`(object)`  
