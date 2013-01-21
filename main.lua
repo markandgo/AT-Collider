@@ -27,7 +27,7 @@ function love.load()
 		
 		if tp.type  == 'solid' then
 			-- set to ground state if bottom sensor
-			if side == 'bottom' then inAir = false; vy = 0 end
+			if side == 'bottom' then floorFound = true; vy = 0 end
 			return true
 		end
 		
@@ -38,8 +38,8 @@ function love.load()
 		-- vertical height maps adjust an object's position vertically
 		if  (tp.type == 'slopeUp' or tp.type == 'slopeDown') and  side == 'bottom' then 
 			-- change to ground state
-			vy    = 0
-			inAir = false
+			vy          = 0
+			floorFound  = true
 			return true 
 		end
 		
@@ -80,7 +80,8 @@ function love.load()
 		end
 	end
 -------------------------------------------------------------------------------		
-	-- player initial velocity
+	-- player initial stuff
+	inAir    = true
 	vx,vy    = 200,0
 	-- gravity
 	gravity  = 300
@@ -91,6 +92,7 @@ function love.draw()
 	player:draw('fill')
 	love.graphics.print('Left mouse click to reposition the player',32,500)
 	love.graphics.print('Arrows to move',32,512)
+	love.graphics.print('Is in air: '..tostring(inAir),32,524)
 end
 -------------------------------------------------------------------------------
 function love.mousepressed(x,y,k)
@@ -117,5 +119,7 @@ function love.update(dt)
 		vy    = -vx
 		dy    = vy*dt
 	end
+	floorFound = false
 	player:move(dx,dy)
+	if not floorFound then inAir = true else inAir = false end
 end
