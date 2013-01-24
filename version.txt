@@ -1,5 +1,10 @@
 Advanced Tiled Collider
 
+[0.14]
+===================
+	Increased performance for side resolve functions by accepting tile range
+	Increased performance for resolveX and resolveY by early exiting
+
 [0.13]
 ===================
 	Removed parameters for side resolve functions
