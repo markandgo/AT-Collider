@@ -129,16 +129,16 @@ Draw the object where mode is `fill` or `line`.
 `gx,gy,gx2,gy2` = **atc.getTileRange**`(object)`  
 Returns `gx`,`gy`,`gx2`,`gy2`, which are the tile range occupied by the rectangle. `gx` and `gy` is the top left corner, `gx2`,`gy2` is the bottom right corner.
 
-**atc.rightSideResolve**`(object)`  
-Resolve right side collision. For **rightSideResolve**, any tile that overlaps the rectangle's right line is checked for collision.
+**atc.rightSideResolve**`(object,gx,gy,gx2,gy2)`  
+Resolve right side collision. `gx,gy,gx2,gy2` is the rectangular tile range of the object. For **rightSideResolve**, any tile that overlaps the rectangle's right line is checked for collision.
 
-**atc.leftSideResolve**`(object)`  
+**atc.leftSideResolve**`(object,gx,gy,gx2,gy2)`  
 ...
 
-**atc.topSideResolve**`(object)`  
+**atc.topSideResolve**`(object,gx,gy,gx2,gy2)`  
 ...
 
-**atc.bottomSideResolve**`(object)`  
+**atc.bottomSideResolve**`(object,gx,gy,gx2,gy2)`  
 ....
 
 **atc.resolveX**`(object)`  

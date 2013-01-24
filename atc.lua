@@ -1,5 +1,5 @@
 --[[
-Advanced Tiled Collider Version 0.13
+Advanced Tiled Collider Version 0.14
 Copyright (c) 2013 Minh Ngo
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -46,8 +46,7 @@ end
 function e:isResolvable(side,gx,gy,tile)
 end
 -----------------------------------------------------------
-function e:rightSideResolve()
-	local gx,gy,gx2,gy2 = self:getTileRange()
+function e:rightSideResolve(gx,gy,gx2,gy2)
 	local mw,mh   = self.map.tileWidth,self.map.tileHeight
 	local newx    = self.x
 	local tx,tile = gx2
@@ -78,8 +77,7 @@ function e:rightSideResolve()
 	self.x = newx
 end
 -----------------------------------------------------------
-function e:leftSideResolve()
-	local gx,gy,gx2,gy2 = self:getTileRange()
+function e:leftSideResolve(gx,gy,gx2,gy2)
 	local mw,mh   = self.map.tileWidth,self.map.tileHeight
 	local newx    = self.x
 	local tx,tile = gx
@@ -103,8 +101,7 @@ function e:leftSideResolve()
 	self.x = newx
 end
 -----------------------------------------------------------
-function e:bottomSideResolve()
-	local gx,gy,gx2,gy2 = self:getTileRange()
+function e:bottomSideResolve(gx,gy,gx2,gy2)
 	local mw,mh   = self.map.tileWidth,self.map.tileHeight
 	local newy    = self.y
 	local ty,tile = gy2
@@ -128,8 +125,7 @@ function e:bottomSideResolve()
 	self.y = newy
 end
 -----------------------------------------------------------
-function e:topSideResolve()
-	local gx,gy,gx2,gy2 = self:getTileRange()
+function e:topSideResolve(gx,gy,gx2,gy2)
 	local mw,mh   = self.map.tileWidth,self.map.tileHeight
 	local newy    = self.y
 	local ty,tile = gy
@@ -154,13 +150,17 @@ function e:topSideResolve()
 end
 -----------------------------------------------------------
 function e:resolveX()
-	self:rightSideResolve()
-	self:leftSideResolve()
+	local oldx          = self.x
+	local gx,gy,gx2,gy2 = self:getTileRange()
+	self:rightSideResolve(gx,gy,gx2,gy2)
+	if oldx == self.x then self:leftSideResolve(gx,gy,gx2,gy2) end
 end
 -----------------------------------------------------------
 function e:resolveY()
-	self:bottomSideResolve()
-	self:topSideResolve()
+	local oldy          = self.y
+	local gx,gy,gx2,gy2 = self:getTileRange()
+	self:bottomSideResolve(gx,gy,gx2,gy2)
+	if oldy == self.y then self:topSideResolve(gx,gy,gx2,gy2) end
 end
 -----------------------------------------------------------
 function e:move(dx,dy)
