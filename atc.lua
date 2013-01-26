@@ -202,13 +202,8 @@ function e:move(dx,dy)
 		self:resolveX()
 		-- if there was a collision, quit movement
 		if self.x ~= newx then break end
-		oldy = self.y
 		-- height correction so we can continue moving horizontally
 		self:resolveY()
-		-- get new height range
-		if self.y ~= oldy then 
-			_,gy,_,gy2 = self:getTileRange()
-		end
 	end	
 	-----------------------------------------------------------
 	-- y direction collision detection
@@ -233,11 +228,7 @@ function e:move(dx,dy)
 		newy  = self.y
 		self:resolveY()
 		if self.y ~= newy then break end
-		oldx = self.x
 		self:resolveX()
-		if self.x ~= oldx then
-			gx,_,gx2,_ = self:getTileRange()
-		end
 	end	
 end
 -----------------------------------------------------------
