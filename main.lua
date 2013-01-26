@@ -6,13 +6,8 @@ function love.load()
 	atlMap  = atl.Loader.load 'map/map.tmx'
 	entity  = require 'libs.atc.atc'
 	
-	-- create player at x = 32, y = 32, width = 20, height = 20
-	-- also we need to specify the map and tile layer for collision
-	player  = entity.new(32,32,20,20,atlMap,select(2,next(atlMap.layers)))
-	
-	-- enabled so we don't pass through seam between slope tile and solid tile
-	player.isBullet = true
-	
+	-- create player with map and tile layer for collision
+	player  = entity.new(32,32,20,20,atlMap,select(2,next(atlMap.layers)))	
 -------------------------------------------------------------------------------
 	-- set up collision callback
 	-- this gets called whenever a side detects a tile/slope
