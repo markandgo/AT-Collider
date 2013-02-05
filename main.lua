@@ -10,12 +10,9 @@ function love.load()
 	player  = entity.new(32,32,20,20,atlMap,select(2,next(atlMap.layers)))	
 -------------------------------------------------------------------------------
 	-- set up collision callback
-	-- this gets called whenever a side detects a tile/slope
+	-- this gets called whenever a sensor detects a tile/slope
 	-- callback needs to return true if you want the collision to be resolved
-	-- note that multiple sides can overlap the same tile
-	-- (!) so it's possible that a tile is detected more than once per movement (!)
-	-- (!) so be careful of resolving a tile collision more than once (!)
-	function player:isResolvable(side,gx,gy,tile)
+	function player:isResolvable(side,tile,gx,gy)
 		-- all the following tile properties can be set in Tiled
 		-- in this demo, I gave each tile a "type" value to differentiate them
 		local tp = tile.properties
@@ -27,9 +24,9 @@ function love.load()
 		end
 		
 		-- A TILE CAN HAVE BOTH TYPES OF HEIGHT MAPS AT THE SAME TIME!
-		-- slope checks:
 		
-		-- in this demo, we give floor slopes vertical height maps
+		-- slope checks:
+		-- we give floor slopes vertical height maps
 		-- vertical height maps adjust an object's position vertically
 		if  (tp.type == 'slopeUp' or tp.type == 'slopeDown') and  side == 'bottom' then 
 			-- change to ground state
@@ -38,7 +35,7 @@ function love.load()
 			return true 
 		end
 		
-		-- in this demo, we give ceiling slopes horizontal height maps		
+		-- we give ceiling slopes horizontal height maps		
 		-- horizontal height maps adjust an object's position horizontally
 		if tp.type == 'ceilingDown' and side == 'right' then 
 			return true 
@@ -50,7 +47,6 @@ function love.load()
 	end
 -------------------------------------------------------------------------------	
 	-- set up heightmaps
-	-- Inspiration:
 	-- http://info.sonicretro.org/SPG:Solid_Tiles
 	-- 45 degree angle:
 	local h = {}; local h2 = {}
