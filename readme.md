@@ -26,38 +26,79 @@ object  = atc.new(x,y,width,height,map,tileLayer)
 
 The collision class creates a collision object that can interact with an ATL map. The object is a rectangle and has the following properties:
 
-**atc.x** (`default: nil`)
+**object.x** (`default: nil`)
 The top left x position of the rectangle
 
-**atc.y** (`default: nil`) 
+**object.y** (`default: nil`) 
 The top left y position of the rectangle
 
-**atc.w** (`default: nil`)
+**object.w** (`default: nil`)
 The width of the rectangle
 
-**atc.h** (`default: nil`) 
+**object.h** (`default: nil`) 
 The height of the rectangle
 
-**atc.map** (`default: nil`) 
+**object.map** (`default: nil`) 
 The associated ATL map for collision detection
 
-**atc.tileLayer** (`default: nil`) 
+**object.tileLayer** (`default: nil`) 
 The associated tile layer for collision detection
 
-**atc.isActive** (`default: true`)    
-If `false`, the object ignores all tile collision with **atc.move** or **atc.moveTo** 
+**object.isActive** (`default: true`)    
+If `false`, the object ignores all tile collision with **object.move** or **object.moveTo** 
 
-**atc.isBullet** (`default: false`)  
-If `true`, use continuous collision detection with **atc.move** or **atc.moveTo**. `false` is default for best performance.
+**object.isBullet** (`default: false`)  
+If `true`, use continuous collision detection with **object.move** or **object.moveTo**. `false` is default for best performance.
+
+## Public Functions
+
+`boolean` = **object:isResolvable**`(side,tile,gx,gy)`  
+This is the user defined collision callback. It gets called whenever a sensor overlaps with a slope or tile. The `side` parameter marks what type of sensor it is. `gx` and `gy` are the grid coordinates of the `tile` object. The `side` parameter affects the direction the object is moved to resolve the collision. For example, if `side` is `right`, the object will be moved left. The callback must return `true` for the collision to be resolved.
+
+Valid `side`:  
+* `left`
+* `right`
+* `top`
+* `bottom`
+
+**object:moveTo**`(x,y)`  
+Move the object to `x`,`y` and resolve all collisions. If `object.isBullet` is `true`, continuous collision detection is used to prevent tunneling through tiles. Horizontal movements are applied before vertical movements.
+
+**object:move**`(dx,dy)`  
+Move the object by `dx`,`dy` amounts and resolve all collisions.
+
+**object:draw**`(mode)`  
+Draw the object where mode is `fill` or `line`.
+
+## Private Functions
+
+`gx,gy,gx2,gy2` = **object:getTileRange**`(x,y,w,h)`  
+Returns `gx`,`gy`,`gx2`,`gy2`, which are the tile range occupied by rectangle's `x,y,w,h`. `gx` and `gy` is the top left corner, `gx2`,`gy2` is the bottom right corner.
+
+**object:rightResolve**`(x,y,w,h)`  
+Resolve right sensor collision. `x,y,w,h` is the rectangular range of the sensor. All tiles overlapping the sensor is checked for collision.
+
+**object:leftResolve**`(x,y,w,h)`  
+...
+
+**object:bottomResolve**`(x,y,w,h)`  
+...
+
+**object:topResolve**`(x,y,w,h)`  
+....
+
+**object:resolveX**`()`  
+Resolve right and left sensor collisions. By default, the area of the `right` sensor is the right half of the object, and the area of the `left` sensor is the left half.
+
+**object:resolveY**`()`  
+Resolve top and bottom sensor collisions. By default, the area of the `bottom` sensor is the bottom half of the object, and the area of the `top` sensor is the top half.
 
 ## Height Maps
 
-Vertical and horizontal height maps are supported for slopes. Just define an array (`verticalHeightMap` or `horizontalHeightMap`) of height values for each tile under `tile.properties`. For an object's position, vertical height maps adjust it vertically, while horizontal height maps adjust it horizontally. A tile can have both height maps at the same time. See the following for how it works.
+Vertical and horizontal height maps are supported for slopes. Just define an array ( `verticalHeightMap` or `horizontalHeightMap` ) of height values for each tile under tile.properties. For an object's position, vertical height maps adjust it vertically, while horizontal height maps adjust it horizontally. A tile can have both height maps at the same time. The following ASCII art shows the "shape" of a slope depending on which side touches it.
 
 ````
 ASCII ART EXAMPLE
-
-The following art shows the shape of a slope tile depending on which side touches it.
 =================
 4x4 tile example
 
@@ -97,52 +138,3 @@ tile.properties.horizontalHeightMap = {1,2,3,4}
 4 = = = =
   4 3 2 1
 ````
-
-## Public Functions
-
-**NOTE**  
-All objects inherit the class functions and data. One function of particular importance is **isResolvable**; one can define it in **atc** or define it per **object**.
-
-`boolean` = **atc.isResolvable**`(object,side,gx,gy,tile)`  
-Collision callback for when a rectangle's `side` overlaps with a slope or tile. Returns true if the collision should be resolved. The `side` parameter is the side of the rectangle that detected the tile. `gx` and `gy` are the grid coordinates of the tile. The `side` parameter affects the direction the rectangle is moved to resolve the collision. For example, if `side` is `right`, the rectangle will be moved left.
-
-Valid `side`:  
-* `left`
-* `right`
-* `top`
-* `bottom`
-
-**NOTE**  
-It's possible for multiple sides to overlap the same tile. One can fall into the trap of resolving a tile collision more than once or with the wrong side! It's possible to avoid this by setting tiles to be floor, ceiling, or wall tiles and resolve collisions with specific sides. Another method is to resolve collision with specific sides depending on the direction of your movement.
-
-**atc.moveTo**`(object,x,y)`  
-Move the object to `x`,`y` and resolve all collisions. If `atc.isBullet` is `true`, continuous collision detection is used to prevent tunneling through tiles. Horizontal movements are applied before vertical movements.
-
-**atc.move**`(object,dx,dy)`  
-Move the object by `dx`,`dy` amounts and resolve all collisions.
-
-**atc.draw**`(object,mode)`  
-Draw the object where mode is `fill` or `line`.
-
-## Private Functions
-
-`gx,gy,gx2,gy2` = **atc.getTileRange**`(object)`  
-Returns `gx`,`gy`,`gx2`,`gy2`, which are the tile range occupied by the rectangle. `gx` and `gy` is the top left corner, `gx2`,`gy2` is the bottom right corner.
-
-**atc.rightSideResolve**`(object,gx,gy,gx2,gy2)`  
-Resolve right side collision. `gx,gy,gx2,gy2` is the rectangular tile range of the object. For **rightSideResolve**, any tile that overlaps the rectangle's right line is checked for collision.
-
-**atc.leftSideResolve**`(object,gx,gy,gx2,gy2)`  
-...
-
-**atc.topSideResolve**`(object,gx,gy,gx2,gy2)`  
-...
-
-**atc.bottomSideResolve**`(object,gx,gy,gx2,gy2)`  
-....
-
-**atc.resolveX**`(object)`  
-Resolve right and left side collisions
-
-**atc.resolveY**`(object)`  
-Resolve top and bottom side collisions

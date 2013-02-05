@@ -1,5 +1,13 @@
 Advanced Tiled Collider
 
+[0.2]
+===================
+	Changed getTileRange
+	Changed isResolvable
+	Changed resolveX,resolveY
+	Added rightResolve,leftResolve,bottomResolve,topResolve
+	Removed rightSideResolve,leftSideResolve,bottomSideResolve,topSideResolve
+
 [0.14]
 ===================
 	Increased performance for side resolve functions by accepting tile range
