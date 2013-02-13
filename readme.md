@@ -53,13 +53,19 @@ If `true`, use continuous collision detection with **object.move** or **object.m
 ## Public Functions
 
 `boolean` = **object:isResolvable**`(side,tile,gx,gy)`  
-This is the user defined collision callback. It gets called whenever a sensor overlaps with a slope or tile. The `side` parameter marks what type of sensor it is. `gx` and `gy` are the grid coordinates of the `tile` object. The `side` parameter affects the direction the object is moved to resolve the collision. For example, if `side` is `right`, the object will be moved left. The callback must return `true` for the collision to be resolved.
+This is the user defined collision callback. It gets called whenever a sensor overlaps with a slope or tile. The `side` parameter marks what type of sensor it is. 
 
-Valid `side`:  
+Sensor types ( `side` ):
 * `left`
 * `right`
 * `top`
 * `bottom`
+
+By default, the `left` sensor covers the left half area of the rectangle, and the `right` sensor covers the right half area. The `top` sensor covers the top half area of the rectangle, and the `bottom` sensor covers the bottom half area.
+
+![Sensors](/sensors.png "Sensors")
+
+`gx` and `gy` are the grid coordinates of the `tile` object. The `side` parameter affects the direction the object is moved to resolve the collision. For example, if `side` is `right`, the object will be moved left. The callback must return `true` for the collision to be resolved.
 
 **object:moveTo**`(x,y)`  
 Move the object to `x`,`y` and resolve all collisions. If `object.isBullet` is `true`, continuous collision detection is used to prevent tunneling through tiles. Horizontal movements are applied before vertical movements.
@@ -88,10 +94,10 @@ Resolve right sensor collision. `x,y,w,h` is the rectangular range of the sensor
 ....
 
 **object:resolveX**`()`  
-Resolve right and left sensor collisions. By default, the area of the `right` sensor is the right half of the object, and the area of the `left` sensor is the left half.
+Resolve right and left sensor collisions.
 
 **object:resolveY**`()`  
-Resolve top and bottom sensor collisions. By default, the area of the `bottom` sensor is the bottom half of the object, and the area of the `top` sensor is the top half.
+Resolve top and bottom sensor collisions.
 
 ## Height Maps
 
