@@ -67,6 +67,26 @@ By default, the `left` sensor covers the left half area of the rectangle, and th
 
 `gx` and `gy` are the grid coordinates of the `tile` object. The `side` parameter affects the direction the object is moved to resolve the collision. For example, if `side` is `right`, the object will be moved left. The callback must return `true` for the collision to be resolved.
 
+**Note**  
+`right` is checked before `left`, and `bottom` is checked before `top` when moving. If your object is moving too fast, the `right`/`bottom` sensor could detect a tile when moving **left** / **up** and resolve the collision. One can avoid this problem by checking the direction of movement and only resolve collision with specific sensors.
+
+Example:  
+````lua
+-- direction check for fast objects
+function object:isResolvable(side,tile,gx,gy)
+	if side == 'right' or side == 'left' then
+		if dx == 0 then return true end
+		if dx > 0 and side == 'right' then return true end
+		if dx < 0 and side == 'left' then return true end
+	end
+	if side == 'bottom' or side == 'top' then
+		if dy == 0 then return true end
+		if dy > 0 and side == 'bottom' then return true end
+		if dy < 0 and side == 'top' then return true end
+	end
+end
+````
+
 **object:moveTo**`(x,y)`  
 Move the object to `x`,`y` and resolve all collisions. If `object.isBullet` is `true`, continuous collision detection is used to prevent tunneling through tiles. Horizontal movements are applied before vertical movements.
 
