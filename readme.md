@@ -65,7 +65,7 @@ By default, the `left` sensor covers the left half area of the rectangle, and th
 
 ![Sensors](/sensors.png "Sensors")
 
-`gx` and `gy` are the grid coordinates of the `tile` object. The `side` parameter affects the direction the object is moved to resolve the collision. For example, if `side` is `right`, the object will be moved left. The callback must return `true` for the collision to be resolved.
+The `tile` object is passed as an argument for tile specific collision. `tile` properties can be set in Tiled or in `tile.properties`. `gx` and `gy` are the grid coordinates of the tile. The `side` parameter affects the direction the object is moved to resolve the collision. For example, if `side` is `right`, the object will be moved left. The callback must return `true` for the collision to be resolved.
 
 **Note**  
 `right` is checked before `left`, and `bottom` is checked before `top` when moving. If your object is moving too fast, the `right`/`bottom` sensor could detect a tile when moving **left** / **up** and resolve the collision. One can avoid this problem by checking the direction of movement and only resolve collision with specific sensors.
