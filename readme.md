@@ -20,7 +20,8 @@ To load the class and create a new collision object:
 ````lua
 atc     = require 'atc'
 object  = atc.new(x,y,width,height,map,tileLayer)
-````
+````  
+If a `tileLayer` is not specified, a layer in **map.layers** will be selected for you. This is useful if your map only has one layer.
 
 ## Properties
 

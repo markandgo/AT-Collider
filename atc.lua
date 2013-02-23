@@ -27,7 +27,7 @@ e.new     = function(x,y,w,h,map,tileLayer)
 		w           = w,
 		h           = h,
 		map         = map,
-		tileLayer   = tileLayer,
+		tileLayer   = tileLayer or select(2,next(map.layers)),
 		isActive    = true,
 		isBullet    = false,
 	}
