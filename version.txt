@@ -2,6 +2,7 @@ Advanced Tiled Collider
 
 [0.21]
 ===================
+	new function auto selects a tileLayer if tileLayer parameter is omitted
 	Changed method of checking height map index
 	Changed resolveX/resolveY to use local variables
 	Removed extraneous variables in move
