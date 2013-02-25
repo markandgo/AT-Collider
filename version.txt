@@ -1,5 +1,11 @@
 Advanced Tiled Collider
 
+[0.21]
+===================
+	Changed method of checking height map index
+	Changed resolveX/resolveY to use local variables
+	Removed extraneous variables in move
+
 [0.2]
 ===================
 	Changed getTileRange
