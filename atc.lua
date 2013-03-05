@@ -1,5 +1,5 @@
 --[[
-Advanced Tiled Collider Version 0.21
+Advanced Tiled Collider Version 0.22
 Copyright (c) 2013 Minh Ngo
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -13,11 +13,15 @@ local ceil  = math.ceil
 local max   = math.max
 local min   = math.min
 -----------------------------------------------------------
+local function getTileRange(self,x,y,w,h)
+	mw,mh   = self.map.tileWidth,self.map.tileHeight
+	gx,gy   = floor(x/mw),floor(y/mh)
+	gx2,gy2 = ceil( (x+w)/mw )-1,ceil( (y+h)/mh )-1
+	return gx,gy,gx2,gy2
+end
+-----------------------------------------------------------
 -- class
-local e   = 
-	{
-	class    = 'collider',
-	}
+local e   = {}
 e.__index = e
 e.new     = function(x,y,w,h,map,tileLayer)
 	local t =
@@ -34,20 +38,12 @@ e.new     = function(x,y,w,h,map,tileLayer)
 	return setmetatable(t,e)
 end
 -----------------------------------------------------------
-local mw,mh,gx,gy,gx2,gy2
-function e:getTileRange(x,y,w,h)
-	mw,mh   = self.map.tileWidth,self.map.tileHeight
-	gx,gy   = floor(x/mw),floor(y/mh)
-	gx2,gy2 = ceil( (x+w)/mw )-1,ceil( (y+h)/mh )-1
-	return gx,gy,gx2,gy2
-end
------------------------------------------------------------
 -- collision callback, return true if tile/slope is collidable
 function e:isResolvable(side,tile,gx,gy)
 end
 -----------------------------------------------------------
 function e:rightResolve(x,y,w,h)
-	local gx,gy,gx2,gy2 = self:getTileRange(x,y,w,h)
+	local gx,gy,gx2,gy2 = getTileRange(self,x,y,w,h)
 	local mw,mh   = self.map.tileWidth,self.map.tileHeight
 	local newx    = self.x
 	local tL      = self.tileLayer
@@ -79,10 +75,11 @@ function e:rightResolve(x,y,w,h)
 		end
 	end
 	self.x = newx
+	return self
 end
 -----------------------------------------------------------
 function e:leftResolve(x,y,w,h)
-	local gx,gy,gx2,gy2 = self:getTileRange(x,y,w,h)
+	local gx,gy,gx2,gy2 = getTileRange(self,x,y,w,h)
 	local mw,mh   = self.map.tileWidth,self.map.tileHeight
 	local newx    = self.x
 	local tL      = self.tileLayer
@@ -108,10 +105,11 @@ function e:leftResolve(x,y,w,h)
 		end
 	end
 	self.x = newx
+	return self
 end
 -----------------------------------------------------------
 function e:bottomResolve(x,y,w,h)
-	local gx,gy,gx2,gy2 = self:getTileRange(x,y,w,h)
+	local gx,gy,gx2,gy2 = getTileRange(self,x,y,w,h)
 	local mw,mh   = self.map.tileWidth,self.map.tileHeight
 	local newy    = self.y
 	local tL      = self.tileLayer
@@ -137,10 +135,11 @@ function e:bottomResolve(x,y,w,h)
 		end
 	end
 	self.y = newy
+	return self
 end
 -----------------------------------------------------------
 function e:topResolve(x,y,w,h)
-	local gx,gy,gx2,gy2 = self:getTileRange(x,y,w,h)
+	local gx,gy,gx2,gy2 = getTileRange(self,x,y,w,h)
 	local mw,mh   = self.map.tileWidth,self.map.tileHeight
 	local newy    = self.y
 	local tL      = self.tileLayer
@@ -166,28 +165,31 @@ function e:topResolve(x,y,w,h)
 		end
 	end
 	self.y = newy
+	return self
 end
 -----------------------------------------------------------
 function e:resolveX()
 	local x,y,w,h = self.x,self.y,self.w,self.h
 	self:rightResolve(x+w/2,y,w/2,h)
 	if x == self.x then self:leftResolve(x,y,w/2,h) end
+	return self
 end
 -----------------------------------------------------------
 function e:resolveY()
 	local x,y,w,h = self.x,self.y,self.w,self.h
 	self:bottomResolve(x,y+h/2,w,h/2)
 	if y == self.y then self:topResolve(x,y,w,h/2) end
+	return self
 end
 -----------------------------------------------------------
 function e:move(dx,dy)
-	if not self.isActive then self.x,self.y = self.x+dx,self.y+dy return end
+	if not self.isActive then self.x,self.y = self.x+dx,self.y+dy return self end
 	if not self.isBullet then
 		self.x = self.x+dx
 		self:resolveX()
 		self.y = self.y+dy
 		self:resolveY()
-		return
+		return self
 	end
 	
 	local mw,mh         = self.map.tileWidth,self.map.tileHeight
@@ -195,7 +197,7 @@ function e:move(dx,dy)
 	local gx,gy,gx2,gy2,newx,newy,gd,least
 	-----------------------------------------------------------
 	-- x direction collision detection
-	gx,gy,gx2,gy2 = self:getTileRange(self.x,self.y,self.w,self.h)
+	gx,gy,gx2,gy2 = getTileRange(self,self.x,self.y,self.w,self.h)
 	
 	local gd,least
 	if dx >= 0 then
@@ -224,7 +226,7 @@ function e:move(dx,dy)
 	end	
 	-----------------------------------------------------------
 	-- y direction collision detection
-	gx,gy,gx2,gy2 = self:getTileRange(self.x,self.y,self.w,self.h)
+	gx,gy,gx2,gy2 = getTileRange(self,self.x,self.y,self.w,self.h)
 	
 	if dy >= 0 then
 		least   = min
@@ -247,14 +249,53 @@ function e:move(dx,dy)
 		if self.y ~= newy then break end
 		self:resolveX()
 	end	
+	return self
 end
 -----------------------------------------------------------
 function e:moveTo(x,y)
-	self:move(x-self.x,y-self.y)
+	return self:move(x-self.x,y-self.y)
+end
+-----------------------------------------------------------
+function e:setSize(w,h)
+	self.w = w; self.h = h
+	return self
+end
+-----------------------------------------------------------
+function e:unpack()
+	return self.x,self.y,self.w,self.h
+end
+-----------------------------------------------------------
+function e:setMap(map)
+	self.map = map
+	return self
+end
+-----------------------------------------------------------
+function e:setTileLayer(tileLayer)
+	self.tileLayer = tileLayer
+	return self
+end
+-----------------------------------------------------------
+function e:setActive(bool)
+	self.isActive = bool
+	return self
+end
+-----------------------------------------------------------
+function e:setBullet(bool)
+	self.isBullet = bool
+	return self
+end	
+-----------------------------------------------------------
+function e:isActive()
+	return self.isActive
+end
+-----------------------------------------------------------
+function e:isBullet()
+	return self.isBullet
 end
 -----------------------------------------------------------
 function e:draw(mode)
 	love.graphics.rectangle(mode,self.x,self.y,self.w,self.h)
+	return self
 end
 -----------------------------------------------------------
 return e

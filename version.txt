@@ -1,5 +1,19 @@
 Advanced Tiled Collider
 
+[0.22]
+===================
+	Removed class name
+	Changed getTileRange to local function
+	Added method setSize
+	Added method unpack
+	Added method setMap
+	Added method setTileLayer
+	Added method setActive
+	Added method setBullet
+	Added method isActive
+	Added method isBullet
+	Added return self for method chaining
+
 [0.21]
 ===================
 	new function auto selects a tileLayer if tileLayer parameter is omitted

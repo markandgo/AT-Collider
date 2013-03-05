@@ -97,27 +97,40 @@ Move the object by `dx`,`dy` amounts and resolve all collisions.
 **object:draw**`(mode)`  
 Draw the object where mode is `fill` or `line`.
 
+`object` = **object:setSize**`(width,height)`
+
+`object` = **object:setMap**`(map)`
+
+`object` = **object:setTileLayer**`(tileLayer)`
+
+`object` = **object:setActive**`(boolean)`
+
+`object` = **object:setBullet**`(boolean)`
+
+`boolean` = **object:isActive**`()`
+
+`boolean` = **object:isBullet**`()`
+
+`x,y,width,height` = **object:unpack**`()`
+
 ## Private Functions
 
-`gx,gy,gx2,gy2` = **object:getTileRange**`(x,y,w,h)`  
-Returns `gx`,`gy`,`gx2`,`gy2`, which are the tile range occupied by rectangle's `x,y,w,h`. `gx` and `gy` is the top left corner, `gx2`,`gy2` is the bottom right corner.
-
-**object:rightResolve**`(x,y,w,h)`  
+`object` = **object:rightResolve**`(x,y,w,h)`  
 Resolve right sensor collision. `x,y,w,h` is the rectangular range of the sensor. All tiles overlapping the sensor is checked for collision.
 
-**object:leftResolve**`(x,y,w,h)`  
+`object` = **object:leftResolve**`(x,y,w,h)`  
 ...
 
-**object:bottomResolve**`(x,y,w,h)`  
+`object` = **object:bottomResolve**`(x,y,w,h)`  
 ...
 
-**object:topResolve**`(x,y,w,h)`  
+`object` = **object:topResolve**`(x,y,w,h)`  
 ....
 
-**object:resolveX**`()`  
+`object` = **object:resolveX**`()`  
 Resolve right and left sensor collisions.
 
-**object:resolveY**`()`  
+`object` = **object:resolveY**`()`  
 Resolve top and bottom sensor collisions.
 
 ## Height Maps
