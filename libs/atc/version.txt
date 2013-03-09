@@ -1,0 +1,42 @@
+Advanced Tiled Collider
+
+[0.21]
+===================
+	new function auto selects a tileLayer if tileLayer parameter is omitted
+	Changed method of checking height map index
+	Changed resolveX/resolveY to use local variables
+	Removed extraneous variables in move
+
+[0.2]
+===================
+	Changed getTileRange
+	Changed isResolvable
+	Changed resolveX,resolveY
+	Added rightResolve,leftResolve,bottomResolve,topResolve
+	Removed rightSideResolve,leftSideResolve,bottomSideResolve,topSideResolve
+
+[0.14]
+===================
+	Increased performance for side resolve functions by accepting tile range
+	Increased performance for resolveX and resolveY by early exiting
+
+[0.13]
+===================
+	Removed parameters for side resolve functions
+	getRange renamed to getTileRange
+
+[0.12]
+===================
+	Added isBullet property to toggle continuous collision detection.
+	setMapAndLayer removed
+	Misc code cleanup/tweak
+
+[0.11]
+===================
+	Index 0 is no longer required for height map arrays
+	Update grid position before checking the opposite sides for resolveX and resolveY
+	Changed continuous collision detection to detect all sides when moving instead of the "front" sides
+
+[0.1]
+===================
+	Initial release
